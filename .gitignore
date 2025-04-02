@@ -1,0 +1,16 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+
+# Logs
+*.log
+status_checker.log
+
+# State file
+state.json
+
