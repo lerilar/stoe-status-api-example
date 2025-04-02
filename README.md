@@ -11,7 +11,9 @@ Users are free to:
 - Make improvements and adaptations
 - Share and distribute modifications
 
-The primary purpose of this script is to demonstrate a practical implementation of the BankID status API integration. While we welcome community contributions and improvements, please note that no official support is provided.
+The primary purpose of this script is to demonstrate a practical implementation of the Stø status API integration. While we welcome community contributions and improvements, please note that no official support is provided.
+
+Please note that the status api may change over time, components may be added, changed or removed. An occasional manual check towards the api is encouraged to catch these changes.
 
 ---
 
@@ -147,7 +149,7 @@ To use Slack for notifications, you'll need:
 
 3. Add a line to run the script at your desired interval:
    ```bash
-   # Run every 5 minutes
+   # Run every 5 minutes - the api does not update 
    */5 * * * * [path-to-installation]/check_status.sh
    ```
 
