@@ -22,3 +22,6 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+state.json
+status_checker.log
+venv/
