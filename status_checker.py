@@ -9,6 +9,7 @@ import copy
 import time
 import yaml
 from dotenv import load_dotenv
+from notification_providers import get_notification_provider
 
 # Default message templates
 DEFAULT_DEGRADATION_TITLE = "🔴 Issue with {name}"
@@ -67,26 +68,6 @@ def get_status():
         logger.error(f"Failed to fetch status data: {e}")
         raise
 
-def send_notification(token, title, message):
-    """Send notification to Gotify server"""
-    try:
-        logger.info(f"Sending notification:")
-        logger.info(f"Title: {title}")
-        logger.info(f"Message: {message}")
-        
-        url = f"https://gotify.bergelarsen.no/message?token={token}"
-        payload = {
-            "title": title,
-            "message": message,
-            "priority": 5
-        }
-        response = requests.post(url, json=payload, timeout=10)
-        response.raise_for_status()
-        logger.info("Notification sent successfully")
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Failed to send notification: {e}")
-        raise
 def load_config():
     """Load configuration from config.yaml file"""
     try:
@@ -227,7 +208,7 @@ def get_message(component_id, component_name, current_status, prev_status=None, 
     
     return title, message.format(**format_params)
 
-def check_components(status_data, token):
+def check_components(status_data, notification_provider):
     """Check each component's status and send notifications for issues"""
     try:
         # Load previous state and configuration
@@ -276,7 +257,7 @@ def check_components(status_data, token):
                         config_map,
                         previous_state
                     )
-                    send_notification(token, title, message)
+                    notification_provider.send_notification(title, message)
                 
                 # Check for recovery (was not operational, now it is)
                 elif prev_status != "operational" and status == "operational" and "recovery" in notify_on:
@@ -289,7 +270,7 @@ def check_components(status_data, token):
                         config_map,
                         previous_state
                     )
-                    send_notification(token, title, message)
+                    notification_provider.send_notification(title, message)
             
             # For new components or first run, notify if not operational
             elif status != "operational" and "degradation" in notify_on:
@@ -303,7 +284,7 @@ def check_components(status_data, token):
                     config_map,
                     previous_state
                 )
-                send_notification(token, title, message)
+                notification_provider.send_notification(title, message)
         
         if not issues_found:
             logger.info("All components are operational")
@@ -342,17 +323,18 @@ def main():
         parser.add_argument("--test", action="store_true", help="Run test sequence to simulate status changes")
         args = parser.parse_args()
         
-        # Load token from environment
-        # Load token from environment and configuration
-        token = load_environment()
+        # Load configuration
         config = load_config()
+        
+        # Initialize notification provider
+        notification_provider = get_notification_provider(config)
         if args.test:
             logger.info("Running in test mode - simulating status changes")
             
             # Test 1: Initial check
             logger.info("Test 1: Checking current status (baseline)")
             status_data = get_status()
-            check_components(status_data, token)
+            check_components(status_data, notification_provider)
             
             # Test 2: Simulate BankID failure
             logger.info("Test 2: Simulating BankID failure")
@@ -362,7 +344,7 @@ def main():
                 {"id": "bankid", "name": "BankID", "status": "major_outage"},
                 {"id": "digital-id-card", "name": "Digital ID-card", "status": "operational"},
                 {"id": "id-check", "name": "ID check", "status": "operational"}
-            ], token)
+            ], notification_provider)
             
             # Test 3: Simulate Digital ID-card failure
             logger.info("Test 3: Simulating Digital ID-card failure")
@@ -372,7 +354,7 @@ def main():
                 {"id": "bankid", "name": "BankID", "status": "major_outage"},
                 {"id": "digital-id-card", "name": "Digital ID-card", "status": "major_outage"},
                 {"id": "id-check", "name": "ID check", "status": "operational"}
-            ], token)
+            ], notification_provider)
             
             # Test 4: Recovery for both
             logger.info("Test 4: Simulating recovery for all components")
@@ -381,7 +363,7 @@ def main():
                 {"id": "bankid", "name": "BankID", "status": "operational"},
                 {"id": "digital-id-card", "name": "Digital ID-card", "status": "operational"},
                 {"id": "id-check", "name": "ID check", "status": "operational"}
-            ], token)
+            ], notification_provider)
             
             logger.info("Test sequence completed")
         else:
@@ -389,22 +371,19 @@ def main():
             status_data = get_status()
             
             # Check components and send notifications
-            check_components(status_data, token)
-        
+            check_components(status_data, notification_provider)
     except Exception as e:
         logger.error(f"Script execution failed: {e}")
         # Optionally, send a notification about the script failure
         try:
-            token = os.getenv('GOTIFY_TOKEN')
-            if token:
-                send_notification(
-                    token,
-                    "Status Checker Error",
-                    f"The status checker script encountered an error: {str(e)}"
-                )
+            error_config = load_config()
+            error_notification_provider = get_notification_provider(error_config)
+            error_notification_provider.send_notification(
+                "Status Checker Error",
+                f"The status checker script encountered an error: {str(e)}"
+            )
         except Exception:
             logger.error("Failed to send error notification")
 
 if __name__ == "__main__":
     main()
-

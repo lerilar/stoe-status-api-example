@@ -1,3 +1,10 @@
+notifications:
+  provider: gotify  # or 'slack'
+  gotify:
+    url: 'https://gotify.bergelarsen.no'
+  slack:
+    channel: '#monitoring'
+
 components:
   - id: bankid
     name: BankID
