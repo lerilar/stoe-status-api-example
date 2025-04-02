@@ -1,6 +1,19 @@
-# Status Checker
+# BankID Status Checker
 
-A Python script for checking status and sending notifications.
+A Python script for monitoring BankID's status page and sending notifications on status changes.
+
+## Disclaimer
+
+This script is provided by BankID BankAxept AS and developed by Erik Larsen (erik.larsen@bidbax.no) as an open-source example of how to use the BankID status API. It is provided "as-is" without any warranty or support.
+
+Users are free to:
+- Use and modify the code
+- Make improvements and adaptations
+- Share and distribute modifications
+
+The primary purpose of this script is to demonstrate a practical implementation of the BankID status API integration. While we welcome community contributions and improvements, please note that no official support is provided.
+
+---
 
 ## Prerequisites
 
