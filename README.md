@@ -19,7 +19,7 @@ Please note that the status api may change over time, components may be added, c
 A more detailed information about the endpoints is provided at [Api doc](https://status.stoe.no/api/v1). This page will be maintained with the api.
 
 To add more ways to alert, you update the `notification_providers.py` file and add the required config
----
+
 
 ## Prerequisites
 
