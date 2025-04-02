@@ -1,0 +1,31 @@
+notifications:
+  provider: gotify  # or 'slack'
+  gotify:
+    url: 'https://gotify.yourdomain.no'
+  slack:
+    channel: '#monitoring'
+
+components:
+  - id: bankid
+    name: BankID
+    enabled: true
+    notify_on:
+      - degradation
+      - recovery
+    messages:
+      degradation: "BankID rapporterer om problemer: {status}"
+      recovery: "BankID kjører som normalt igjen{duration}"
+  - id: digital-id-card
+    name: Digital ID-card
+    enabled: true
+    notify_on:
+      - degradation
+    messages:
+      degradation: "Digital ID-card verification is down: {status}"
+      recovery: "Digital ID-card service is back online{duration}"
+  - id: id-check
+    name: ID check
+    enabled: false
+    messages:
+      degradation: "ID check service is unavailable: {status}"
+      recovery: "ID check service has recovered{duration}"
