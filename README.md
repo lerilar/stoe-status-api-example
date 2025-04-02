@@ -16,7 +16,7 @@ The primary purpose of this script is to demonstrate a practical implementation 
 [!NOTE]
 Please note that the status api may change over time, components may be added, changed or removed. An occasional manual check towards the api is encouraged to catch these changes.
 
-A more detailed information about the endpoints is provided at [Api doc](https://status.stoe.no/api/v1)
+A more detailed information about the endpoints is provided at [Api doc](https://status.stoe.no/api/v1). This page will be maintained with the api.
 
 To add more ways to alert, you update the `notification_providers.py` file and add the required config
 ---
