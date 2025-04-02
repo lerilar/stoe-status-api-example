@@ -74,6 +74,50 @@ A Python script for checking status and sending notifications.
        - Use {status} placeholder for status information
        - Use {duration} placeholder for downtime duration
 
+## Slack Configuration
+
+To use Slack for notifications, you'll need:
+
+1. A Slack Bot Token (starts with `xoxb-`)
+2. A Slack channel where notifications will be sent
+
+### Setup Steps:
+
+1. Create a Slack App and Bot:
+   - Go to https://api.slack.com/apps
+   - Create a new app or use an existing one
+   - Under "OAuth & Permissions", add these bot token scopes:
+     - chat:write
+     - channels:read (for public channels)
+     - groups:read (for private channels)
+   - Install the app to your workspace
+   - Copy the Bot User OAuth Token (starts with `xoxb-`)
+
+2. Configure the environment:
+   - Add your Slack token to `.env`:
+     ```
+     SLACK_TOKEN=xoxb-your-bot-token
+     ```
+
+3. Update config.yaml:
+   ```yaml
+   notifications:
+     provider: slack
+     slack:
+       channel: '#your-channel'  # Use '#' for public, '@' for DMs
+   ```
+
+4. Invite the bot to your channel:
+   - In Slack, type `/invite @your-bot-name` in the channel you specified
+
+### Notes:
+- No Slack client installation is needed on the server
+- The script uses Slack's Web API via HTTPS
+- The only requirements are:
+  - Internet connection to reach slack.com
+  - Valid Slack Bot Token
+  - The 'requests' library (included in requirements.txt)
+
 ## Setting up the Cron Job
 
 1. Ensure the check_status.sh script is executable:
