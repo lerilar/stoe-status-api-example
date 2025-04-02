@@ -4,7 +4,7 @@ A Python script for monitoring BankID's status page and sending notifications on
 
 ## Disclaimer
 
-This script is provided by BankID BankAxept AS and developed by Erik Larsen (erik.larsen@bidbax.no) as an open-source example of how to use the BankID status API. It is provided "as-is" without any warranty or support.
+This script is provided by BankID BankAxept AS and developed as an open-source example of how to use the BankID status API. It is provided "as-is" without any warranty or support.
 
 Users are free to:
 - Use and modify the code
@@ -13,8 +13,12 @@ Users are free to:
 
 The primary purpose of this script is to demonstrate a practical implementation of the Stø status API integration. While we welcome community contributions and improvements, please note that no official support is provided.
 
+[!NOTE]
 Please note that the status api may change over time, components may be added, changed or removed. An occasional manual check towards the api is encouraged to catch these changes.
 
+A more detailed information about the endpoints is provided at [Api doc](https://status.stoe.no/api/v1)
+
+To add more ways to alert, you update the `notification_providers.py` file and add the required config
 ---
 
 ## Prerequisites
