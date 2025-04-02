@@ -13,7 +13,7 @@ Users are free to:
 
 The primary purpose of this script is to demonstrate a practical implementation of the Stø status API integration. While we welcome community contributions and improvements, please note that no official support is provided.
 
-[!NOTE]
+[!TIP]
 Please note that the status api may change over time, components may be added, changed or removed. An occasional manual check towards the api is encouraged to catch these changes.
 
 A more detailed information about the endpoints is provided at [Api doc](https://status.stoe.no/api/v1). This page will be maintained with the api.
