@@ -156,6 +156,7 @@ To use Slack for notifications, you'll need:
    # Run every 5 minutes - the api does not update 
    */5 * * * * [path-to-installation]/check_status.sh
    ```
+4. Update check_status.sh with the correct path (PROJECT_DIR) 
 
 The check_status.sh script will:
 
